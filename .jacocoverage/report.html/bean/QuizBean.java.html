@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>QuizBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WebApplication3&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">QuizBean.java</span></div><h1>QuizBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+
+@ManagedBean
+@Named(&quot;quizBean&quot;)
+
+<span class="fc" id="L11">public class QuizBean implements Serializable {</span>
+    private String q1;
+    private String q2;
+    private String q3;
+    private String q4;
+    private String q5;
+    private String results;
+
+    // Getters and Setters
+<span class="nc" id="L20">    public String getQ1() { return q1; }</span>
+<span class="fc" id="L21">    public void setQ1(String q1) { this.q1 = q1; }</span>
+
+<span class="nc" id="L23">    public String getQ2() { return q2; }</span>
+<span class="fc" id="L24">    public void setQ2(String q2) { this.q2 = q2; }</span>
+
+<span class="nc" id="L26">    public String getQ3() { return q3; }</span>
+<span class="fc" id="L27">    public void setQ3(String q3) { this.q3 = q3; }</span>
+
+<span class="nc" id="L29">    public String getQ4() { return q4; }</span>
+<span class="fc" id="L30">    public void setQ4(String q4) { this.q4 = q4; }</span>
+
+<span class="nc" id="L32">    public String getQ5() { return q5; }</span>
+<span class="fc" id="L33">    public void setQ5(String q5) { this.q5 = q5; }</span>
+
+<span class="fc" id="L35">    public String getResults() { return results; }</span>
+
+    // Method to check the quiz answers
+    public String checkAnswers() {
+<span class="fc" id="L39">        int score = 0;</span>
+
+        // Define correct answers
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (&quot;A&quot;.equals(q1)) { score++; }</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (&quot;D&quot;.equals(q2)) { score++; }</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (&quot;B&quot;.equals(q3)) { score++; }</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (&quot;A&quot;.equals(q4)) { score++; }</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (&quot;D&quot;.equals(q5)) { score++; }</span>
+
+        // Set the result based on the score
+<span class="fc" id="L49">        results = &quot;You scored &quot; + score + &quot;/5.&quot;;</span>
+
+<span class="fc" id="L51">        return null; // Stay on the same page</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

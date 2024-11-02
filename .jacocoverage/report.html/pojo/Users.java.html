@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Users.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WebApplication3&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">pojo</a> &gt; <span class="el_source">Users.java</span></div><h1>Users.java</h1><pre class="source lang-java linenums">package pojo;
+// Generated Sep 26, 2024 8:20:19 PM by Hibernate Tools 4.3.1
+
+import DAO.DAOLogin;
+import DAO.DAOUser;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+@ManagedBean
+@SessionScoped
+
+public class Users implements java.io.Serializable {
+
+    private Integer id;
+    private String username;
+    private String email;
+    private String password;
+    private Date createdAt;
+<span class="fc" id="L25">    private Set progresses = new HashSet(0);</span>
+<span class="fc" id="L26">    private Set commentses = new HashSet(0);</span>
+<span class="fc" id="L27">    private Set purchasedCourses = new HashSet(0);</span>
+    private String confirmPassword;
+
+<span class="fc" id="L30">    public Users() {</span>
+<span class="fc" id="L31">    }</span>
+
+<span class="fc" id="L33">    public Users(String username, String email, String password, Date createdAt) {</span>
+<span class="fc" id="L34">        this.username = username;</span>
+<span class="fc" id="L35">        this.email = email;</span>
+<span class="fc" id="L36">        this.password = password;</span>
+<span class="fc" id="L37">        this.createdAt = createdAt;</span>
+<span class="fc" id="L38">    }</span>
+
+<span class="fc" id="L40">    public Users(String username, String email, String password, Date createdAt, Set progresses, Set commentses, Set purchasedCourses) {</span>
+<span class="fc" id="L41">        this.username = username;</span>
+<span class="fc" id="L42">        this.email = email;</span>
+<span class="fc" id="L43">        this.password = password;</span>
+<span class="fc" id="L44">        this.createdAt = createdAt;</span>
+<span class="fc" id="L45">        this.progresses = progresses;</span>
+<span class="fc" id="L46">        this.commentses = commentses;</span>
+<span class="fc" id="L47">        this.purchasedCourses = purchasedCourses;</span>
+<span class="fc" id="L48">    }</span>
+
+    public Integer getId() {
+<span class="fc" id="L51">        return this.id;</span>
+    }
+
+    public void setId(Integer id) {
+<span class="fc" id="L55">        this.id = id;</span>
+<span class="fc" id="L56">    }</span>
+
+    public String getUsername() {
+<span class="fc" id="L59">        return this.username;</span>
+    }
+
+    public void setUsername(String username) {
+<span class="fc" id="L63">        this.username = username;</span>
+<span class="fc" id="L64">    }</span>
+
+    public String getEmail() {
+<span class="fc" id="L67">        return this.email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L71">        this.email = email;</span>
+<span class="fc" id="L72">    }</span>
+
+    public String getPassword() {
+<span class="fc" id="L75">        return this.password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="fc" id="L79">        this.password = password;</span>
+<span class="fc" id="L80">    }</span>
+
+    public Date getCreatedAt() {
+<span class="fc" id="L83">        return this.createdAt;</span>
+    }
+
+    public void setCreatedAt(Date createdAt) {
+<span class="fc" id="L87">        this.createdAt = createdAt;</span>
+<span class="fc" id="L88">    }</span>
+
+    public Set getProgresses() {
+<span class="fc" id="L91">        return this.progresses;</span>
+    }
+
+    public void setProgresses(Set progresses) {
+<span class="fc" id="L95">        this.progresses = progresses;</span>
+<span class="fc" id="L96">    }</span>
+
+    public Set getCommentses() {
+<span class="fc" id="L99">        return this.commentses;</span>
+    }
+
+    public void setCommentses(Set commentses) {
+<span class="fc" id="L103">        this.commentses = commentses;</span>
+<span class="fc" id="L104">    }</span>
+
+    public Set getPurchasedCourses() {
+<span class="fc" id="L107">        return this.purchasedCourses;</span>
+    }
+
+    public void setPurchasedCourses(Set purchasedCourses) {
+<span class="fc" id="L111">        this.purchasedCourses = purchasedCourses;</span>
+<span class="fc" id="L112">    }</span>
+
+    public String getConfirmPassword() {
+<span class="fc" id="L115">        return confirmPassword;</span>
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+<span class="fc" id="L119">        this.confirmPassword = confirmPassword;</span>
+<span class="fc" id="L120">    }</span>
+
+    
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

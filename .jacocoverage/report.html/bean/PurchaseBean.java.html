@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PurchaseBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WebApplication3&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">PurchaseBean.java</span></div><h1>PurchaseBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.DAOPurchase;
+import pojo.Courses;
+import pojo.PurchasedCourse;
+import pojo.Users;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
+
+@ManagedBean(name = &quot;purchaseBean&quot;)
+@SessionScoped
+<span class="fc" id="L17">public class PurchaseBean {</span>
+
+<span class="fc" id="L19">    private DAOPurchase DAOPurchase = new DAOPurchase();</span>
+    private String selectedCourseId;
+
+    // Setter for DAOPurchase (added for testing)
+    public void setDAOPurchase(DAOPurchase DAOPurchase) {
+<span class="fc" id="L24">        this.DAOPurchase = DAOPurchase;</span>
+<span class="fc" id="L25">    }</span>
+
+    // Getter and Setter for selectedCourseId
+    public String getSelectedCourseId() {
+<span class="nc" id="L29">        return selectedCourseId;</span>
+    }
+
+    public void setSelectedCourseId(String selectedCourseId) {
+<span class="nc" id="L33">        this.selectedCourseId = selectedCourseId;</span>
+<span class="nc" id="L34">    }</span>
+
+    public boolean hasPurchasedCourse(int courseId, HttpServletRequest request) {
+<span class="fc" id="L37">        HttpSession session = request.getSession(false);</span>
+<span class="fc" id="L38">        Users loggedUser = (Users) session.getAttribute(&quot;user&quot;);</span>
+
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (loggedUser == null) {</span>
+<span class="nc" id="L41">            return false;  // User is not logged in</span>
+        }
+
+<span class="fc" id="L44">        List&lt;PurchasedCourse&gt; purchasedCourses = DAOPurchase.getPurchasedCoursesByUser(loggedUser.getId());</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (PurchasedCourse purchasedCourse : purchasedCourses) {</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">            if (purchasedCourse.getCourses().getCourseId() == courseId) {</span>
+<span class="fc" id="L48">                return true;</span>
+            }
+<span class="nc" id="L50">        }</span>
+
+<span class="fc" id="L52">        return false;</span>
+    }
+
+    public String buyCourse(int courseId, HttpServletRequest request) {
+<span class="fc" id="L56">        HttpSession session = request.getSession(false);</span>
+<span class="fc" id="L57">        Users loggedUser = (Users) session.getAttribute(&quot;user&quot;);</span>
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (loggedUser == null) {</span>
+<span class="fc" id="L60">            return &quot;login.xhtml?faces-redirect=true&quot;;</span>
+        }
+
+<span class="fc" id="L63">        Courses course = DAOPurchase.getCourseById(courseId);</span>
+
+<span class="fc" id="L65">        PurchasedCourse purchasedCourse = new PurchasedCourse();</span>
+<span class="fc" id="L66">        purchasedCourse.setCourses(course);</span>
+<span class="fc" id="L67">        purchasedCourse.setUsers(loggedUser);</span>
+<span class="fc" id="L68">        purchasedCourse.setPurchaseDate(new Date());</span>
+
+<span class="fc" id="L70">        DAOPurchase.savePurchasedCourse(purchasedCourse);</span>
+
+<span class="pc bpc" id="L72" title="3 of 4 branches missed.">        switch (courseId) {</span>
+            case 1:
+<span class="nc" id="L74">                return &quot;materi-front-end.xhtml?faces-redirect=true&quot;;</span>
+            case 2:
+<span class="fc" id="L76">                return &quot;materi-back-end.xhtml?faces-redirect=true&quot;;</span>
+            case 3:
+<span class="nc" id="L78">                return &quot;materi-frame-work.xhtml?faces-redirect=true&quot;;</span>
+            default:
+<span class="nc" id="L80">                return &quot;courses.xhtml&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

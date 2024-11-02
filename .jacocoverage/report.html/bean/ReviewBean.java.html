@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ReviewBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WebApplication3&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">ReviewBean.java</span></div><h1>ReviewBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.CommentsDAO;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import pojo.Comments;
+import pojo.Users;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+public class ReviewBean {
+
+    private String comment;
+    private int rating;
+    private String username;
+    private int userId;
+    private List&lt;Comments&gt; reviews;
+    private List&lt;Comments&gt; allComments;
+    private CommentsDAO commentsDAO;
+    private int commentId;
+
+    private LoginBean sessionController;
+
+<span class="fc" id="L28">    public ReviewBean() {</span>
+<span class="fc" id="L29">        commentsDAO = new CommentsDAO();</span>
+<span class="fc" id="L30">    }</span>
+
+    // Getter dan Setter
+    public String getComment() {
+<span class="fc" id="L34">        return comment;</span>
+    }
+
+    public void setComment(String comment) {
+<span class="fc" id="L38">        this.comment = comment;</span>
+<span class="fc" id="L39">    }</span>
+
+    public int getRating() {
+<span class="fc" id="L42">        return rating;</span>
+    }
+
+    public void setRating(int rating) {
+<span class="fc" id="L46">        this.rating = rating;</span>
+<span class="fc" id="L47">    }</span>
+
+    public String getUsername() {
+<span class="nc" id="L50">        return username;</span>
+    }
+
+    public void setUsername(String username) {
+<span class="nc" id="L54">        this.username = username;</span>
+<span class="nc" id="L55">    }</span>
+
+    public int getUserId() {
+<span class="nc" id="L58">        return userId;</span>
+    }
+
+    public void setUserId(int userId) {
+<span class="nc" id="L62">        this.userId = userId;</span>
+<span class="nc" id="L63">    }</span>
+
+    public int getCommentId() {
+<span class="fc" id="L66">        return commentId;</span>
+    }
+
+    public void setCommentId(int commentId) {
+<span class="fc" id="L70">        this.commentId = commentId;</span>
+<span class="fc" id="L71">    }</span>
+
+    public List&lt;Comments&gt; getReviews() {
+<span class="fc" id="L74">        Users loggedInUser = sessionController.getLoggedInUser();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (loggedInUser != null) {</span>
+<span class="fc" id="L76">            return commentsDAO.getCommentsByUserId(loggedInUser.getId());</span>
+        } else {
+<span class="fc" id="L78">            return null;</span>
+        }
+    }
+
+    public List&lt;Comments&gt; getAllComments() {
+<span class="nc" id="L83">        return allComments;</span>
+    }
+
+    public LoginBean getSessionController() {
+<span class="nc" id="L87">        return sessionController;</span>
+    }
+
+    public void setSessionController(LoginBean sessionController) {
+<span class="fc" id="L91">        this.sessionController = sessionController;</span>
+<span class="fc" id="L92">    }</span>
+
+    // Method untuk memuat review
+    public void loadReviews(HttpServletRequest request) {
+<span class="fc" id="L96">        Users loggedInUser = sessionController.getLoggedInUser(); // Gunakan sessionController untuk mengambil loggedInUser</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (loggedInUser != null) {</span>
+<span class="fc" id="L98">            reviews = commentsDAO.getCommentsByUserId(loggedInUser.getId());</span>
+        } else {
+<span class="fc" id="L100">            reviews = null;</span>
+        }
+<span class="fc" id="L102">        loadAllComments(); // Masih memuat semua komentar</span>
+<span class="fc" id="L103">    }</span>
+
+    // Method untuk submit review
+    public void submitReview(HttpServletRequest request) {
+<span class="fc" id="L107">        HttpSession session = request.getSession(true);</span>
+<span class="fc" id="L108">        Integer userId = (Integer) session.getAttribute(&quot;userId&quot;);</span>
+
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (userId == null) {</span>
+<span class="fc" id="L111">            throw new IllegalStateException(&quot;User is not logged in!&quot;);</span>
+        }
+
+        // Buat objek komentar dan simpan
+<span class="fc" id="L115">        Comments newComment = new Comments();</span>
+<span class="fc" id="L116">        newComment.setComment(comment);</span>
+<span class="fc" id="L117">        newComment.setRating(rating);</span>
+<span class="fc" id="L118">        newComment.setUsername(username);</span>
+<span class="fc" id="L119">        newComment.setCreatedAt(new Date());</span>
+
+        // Set user yang terkait dengan review
+<span class="fc" id="L122">        Users user = new Users();</span>
+<span class="fc" id="L123">        user.setId(userId);</span>
+<span class="fc" id="L124">        newComment.setUsers(user);</span>
+
+        // Simpan review
+<span class="fc" id="L127">        commentsDAO.saveComment(newComment);</span>
+
+        // Reset form setelah submit
+<span class="fc" id="L130">        comment = &quot;&quot;;</span>
+<span class="fc" id="L131">        rating = 0;</span>
+
+        // Muat ulang review
+<span class="fc" id="L134">        loadReviews(request);</span>
+<span class="fc" id="L135">    }</span>
+
+    // Method untuk menambah komentar
+    public void addComment(HttpServletRequest request, HttpServletResponse response) {
+<span class="fc" id="L139">        Users user = sessionController.getLoggedInUser();</span>
+
+        // Jika user belum login, redirect ke halaman login dan tampilkan pesan
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (user == null) {</span>
+            try {
+<span class="fc" id="L144">                request.setAttribute(&quot;message&quot;, &quot;You need to log in to add a comment.&quot;);</span>
+<span class="fc" id="L145">                RequestDispatcher dispatcher = request.getRequestDispatcher(&quot;login.xhtml?faces-redirect=true&quot;);</span>
+<span class="fc" id="L146">                dispatcher.forward(request, response); // Gunakan objek response yang valid</span>
+<span class="fc" id="L147">            } catch (IOException | ServletException e) {</span>
+<span class="fc" id="L148">                e.printStackTrace(); // Menangani IOException dan ServletException</span>
+<span class="fc" id="L149">            }</span>
+<span class="fc" id="L150">            return;</span>
+        }
+
+        // Validasi komentar dan rating
+<span class="pc bpc" id="L154" title="1 of 4 branches missed.">        if (comment == null || comment.isEmpty()) {</span>
+<span class="fc" id="L155">            request.setAttribute(&quot;error&quot;, &quot;Comment cannot be empty!&quot;);</span>
+<span class="fc" id="L156">            return;</span>
+        }
+
+<span class="pc bpc" id="L159" title="1 of 4 branches missed.">        if (rating &lt; 1 || rating &gt; 5) {</span>
+<span class="fc" id="L160">            request.setAttribute(&quot;error&quot;, &quot;Rating must be between 1 and 5!&quot;);</span>
+<span class="fc" id="L161">            return;</span>
+        }
+
+        // Buat objek komentar baru
+<span class="fc" id="L165">        Comments newComment = new Comments();</span>
+<span class="fc" id="L166">        newComment.setComment(comment);</span>
+<span class="fc" id="L167">        newComment.setRating(rating);</span>
+<span class="fc" id="L168">        newComment.setUsername(sessionController.getUsername());</span>
+<span class="fc" id="L169">        newComment.setCreatedAt(new Date());</span>
+
+        // Hubungkan komentar dengan user yang login
+<span class="fc" id="L172">        newComment.setUsers(user);</span>
+
+        // Simpan komentar ke database
+<span class="fc" id="L175">        commentsDAO.saveComment(newComment);</span>
+
+        // Reset form setelah submit
+<span class="fc" id="L178">        comment = &quot;&quot;;</span>
+<span class="fc" id="L179">        rating = 0;</span>
+
+        // Muat ulang komentar setelah menambah
+<span class="fc" id="L182">        loadReviews(request);</span>
+<span class="fc" id="L183">    }</span>
+
+    // Method untuk memuat semua komentar
+    public void loadAllComments() {
+<span class="fc" id="L187">        allComments = commentsDAO.getAllComments();</span>
+<span class="fc" id="L188">    }</span>
+
+    // Method untuk mengedit komentar
+    public void editComment(Comments comment) {
+<span class="fc" id="L192">        this.commentId = comment.getCommentId(); // Set commentId dari komentar yang sedang diedit</span>
+<span class="fc" id="L193">        this.comment = comment.getComment();     // Set nilai komentar untuk ditampilkan di form</span>
+<span class="fc" id="L194">        this.rating = comment.getRating();       // Set nilai rating untuk ditampilkan di form</span>
+<span class="fc" id="L195">    }</span>
+
+    // Method untuk mengupdate komentar
+    public void updateComment(HttpServletRequest request) {
+<span class="fc" id="L199">        Users user = sessionController.getLoggedInUser();</span>
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (user == null) {</span>
+<span class="fc" id="L202">            throw new IllegalStateException(&quot;User is not logged in!&quot;);</span>
+        }
+
+        // Ambil komentar yang sedang diedit menggunakan commentId
+<span class="fc" id="L206">        Comments updatedComment = commentsDAO.getCommentById(this.commentId);</span>
+
+<span class="pc bpc" id="L208" title="2 of 4 branches missed.">        if (updatedComment != null &amp;&amp; updatedComment.getUsers().getId() == user.getId()) {</span>
+<span class="fc" id="L209">            updatedComment.setComment(this.comment);</span>
+<span class="fc" id="L210">            updatedComment.setRating(this.rating);</span>
+<span class="fc" id="L211">            updatedComment.setCreatedAt(new Date());</span>
+
+<span class="fc" id="L213">            commentsDAO.updateComment(updatedComment);</span>
+
+<span class="fc" id="L215">            this.comment = &quot;&quot;;</span>
+<span class="fc" id="L216">            this.rating = 0;</span>
+<span class="fc" id="L217">            this.commentId = 0;</span>
+
+<span class="fc" id="L219">            request.setAttribute(&quot;message&quot;, &quot;Comment updated successfully!&quot;);</span>
+        } else {
+<span class="nc" id="L221">            request.setAttribute(&quot;error&quot;, &quot;Failed to update comment!&quot;);</span>
+        }
+
+        // Muat ulang komentar
+<span class="fc" id="L225">        loadReviews(request);</span>
+<span class="fc" id="L226">    }</span>
+
+    // Method untuk menghapus komentar
+    public void deleteComment(Comments comment, HttpServletRequest request) {
+<span class="fc" id="L230">        commentsDAO.deleteComment(comment);</span>
+        // Muat ulang komentar setelah penghapusan
+<span class="fc" id="L232">        reviews = commentsDAO.getCommentsByUserId(userId);</span>
+<span class="fc" id="L233">    }</span>
+
+    // Method untuk memeriksa apakah user telah berkomentar
+    public boolean hasUserCommented(int userId) {
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for (Comments comment : allComments) {</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">            if (comment.getUsers().getId() == userId) {</span>
+<span class="fc" id="L239">                return true;</span>
+            }
+<span class="nc" id="L241">        }</span>
+<span class="fc" id="L242">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

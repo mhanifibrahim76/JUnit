@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DAOUser.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WebApplication3&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">DAOUser.java</span></div><h1>DAOUser.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package DAO;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import pojo.StudyRoomUtil;
+import pojo.Users;
+
+/**
+ *
+ * @author mhanifibrahim7890
+ */
+
+
+<span class="fc" id="L20">public class DAOUser {</span>
+    public void saveUser(Users user) {
+<span class="fc" id="L22">        Transaction transaction = null;</span>
+<span class="fc" id="L23">        Session session = null;</span>
+        try {
+<span class="fc" id="L25">            session = StudyRoomUtil.getSessionFactory().openSession();  // Buka session Hibernate</span>
+<span class="fc" id="L26">            transaction = session.beginTransaction();  // Mulai transaksi</span>
+
+            // Simpan objek Users
+<span class="fc" id="L29">            session.save(user);</span>
+
+            // Commit transaksi
+<span class="fc" id="L32">            transaction.commit();</span>
+<span class="fc" id="L33">        } catch (Exception e) {</span>
+            // Rollback transaksi jika terjadi error
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">            if (transaction != null) {</span>
+<span class="nc" id="L36">                transaction.rollback();</span>
+            }
+<span class="fc" id="L38">            e.printStackTrace();  // Atau gunakan logger</span>
+        } finally {
+<span class="pc bpc" id="L40" title="4 of 6 branches missed.">            if (session != null) {</span>
+<span class="pc" id="L41">                session.close();  // Tutup session</span>
+            }
+        }
+<span class="fc" id="L44">    }</span>
+    
+    public boolean isEmailRegistered(String email) {
+<span class="fc" id="L47">    Users user = null;</span>
+<span class="fc" id="L48">    Session session = null;</span>
+    try {
+<span class="fc" id="L50">        session = StudyRoomUtil.getSessionFactory().openSession();</span>
+<span class="fc" id="L51">        Query query = session.createQuery(&quot;from Users where email= :email&quot;);</span>
+<span class="fc" id="L52">        query.setParameter(&quot;email&quot;, email);  // Gunakan setParameter</span>
+<span class="fc" id="L53">        user = (Users) query.uniqueResult();  // Mendapatkan hasil tunggal</span>
+<span class="fc" id="L54">    } catch (Exception e) {</span>
+<span class="fc" id="L55">        e.printStackTrace();</span>
+    } finally {
+<span class="pc bpc" id="L57" title="4 of 6 branches missed.">        if (session != null) {</span>
+<span class="pc" id="L58">            session.close();  // Pastikan session ditutup</span>
+        }
+    }
+<span class="fc bfc" id="L61" title="All 2 branches covered.">    return user != null;  // Return true jika user ditemukan</span>
+}
+
+    
+    public boolean isEmailExists(String email) {
+<span class="fc" id="L66">    Session session = null;</span>
+<span class="fc" id="L67">    boolean exists = false;</span>
+    try {
+<span class="fc" id="L69">        session = StudyRoomUtil.getSessionFactory().openSession();</span>
+<span class="fc" id="L70">        Query query = session.createQuery(&quot;from Users where email = :email&quot;);</span>
+<span class="fc" id="L71">        query.setString(&quot;email&quot;, email);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        exists = query.uniqueResult() != null;</span>
+<span class="fc" id="L73">    } catch (Exception e) {</span>
+<span class="fc" id="L74">        e.printStackTrace();</span>
+    } finally {
+<span class="pc bpc" id="L76" title="4 of 6 branches missed.">        if (session != null) {</span>
+<span class="pc" id="L77">            session.close();</span>
+        }
+    }
+<span class="fc" id="L80">    return exists;</span>
+}
+    
+    public Users findByUsername(String username) {
+<span class="fc" id="L84">        Transaction transaction = null;</span>
+<span class="fc" id="L85">        Users user = null;</span>
+<span class="fc" id="L86">        Session session = StudyRoomUtil.getSessionFactory().openSession();</span>
+        try {
+<span class="fc" id="L88">            transaction = session.beginTransaction();</span>
+<span class="fc" id="L89">            Query query = session.createQuery(&quot;FROM Users WHERE username = :username&quot;);</span>
+<span class="fc" id="L90">            query.setParameter(&quot;username&quot;, username);</span>
+<span class="fc" id="L91">            user = (Users) query.uniqueResult();  // Explicit cast to User</span>
+<span class="fc" id="L92">            transaction.commit();</span>
+<span class="fc" id="L93">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">            if (transaction != null) {</span>
+<span class="fc" id="L95">                transaction.rollback();</span>
+            }
+<span class="fc" id="L97">            e.printStackTrace();</span>
+        } finally {
+<span class="pc" id="L99">            session.close();  // Always close the session</span>
+<span class="fc" id="L100">        }</span>
+<span class="fc" id="L101">        return user;</span>
+    }
+
+    
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
